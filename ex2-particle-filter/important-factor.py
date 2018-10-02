@@ -63,5 +63,5 @@ z = data["Z"]
 z = z[:,:,31]
 x = data["XODO"]
 x = x[:,31] 
-w = compute_important_factor(x, z, lm, 0.2, 2) 
+w = compute_important_factor(x, z, lm, 0.2, 2*np.pi/180) 
 print(w) 
