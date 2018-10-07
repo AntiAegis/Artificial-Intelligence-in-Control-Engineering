@@ -193,7 +193,7 @@ class ParticleFilter(object):
 
 
 	# Visualize the progress
-	def visualize(self, X_true, X_record, W_record, particle="max"):
+	def visualize(self, X_true, X_ODO, X_record, W_record, particle="max"):
 		"""
 		[Arguments]
 			X_true : (ndarray) Ground truth matrix of positions over time
@@ -207,6 +207,7 @@ class ParticleFilter(object):
 				particle must be "max", "min", or "median".
 		"""
 		x_true, y_true = X_true[0,:], X_true[1,:]
+		x_odo_true, y_odo_true = X_ODO[0,:], X_ODO[1,:] 
 		x_lm, y_lm = self.landmarks[0,:], self.landmarks[1,:]
 		x_odo, y_odo = [], []
 
@@ -225,8 +226,9 @@ class ParticleFilter(object):
 
 		plt.figure(1)
 		plt.plot(x_true, y_true, "-r")
+		plt.plot(x_odo_true, y_odo_true, "-g")
 		plt.plot(x_odo, y_odo, "--b")
 		plt.plot(x_lm, y_lm, "xm")
 		plt.plot(x_true[0], y_true[0], "o")
-		plt.legend(["Ground truth", "Prediction", "Landmark", "Starting"])
+		plt.legend(["Ground truth", "XODO", "Prediction", "Landmark", "Starting"])
 		plt.show()

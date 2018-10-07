@@ -22,7 +22,7 @@ particle = "max"
 #------------------------------------------------------------------------------
 # Load data
 data = loadmat("data20171107.mat")
-landmarks, X_gt, Z, U = data["lm"], data["XTRUE"], data["Z"], data["VG"]
+landmarks, X_gt, Z, U, X_ODO = data["lm"], data["XTRUE"], data["Z"], data["VG"], data["XODO"]
 n_steps = X_gt.shape[1]
 
 
@@ -48,4 +48,4 @@ X_record, W_record = particle_filt.loop_over_steps(x_start, U, Z)
 # Visualize the result
 mse = particle_filt.compute_MSE(X_gt, X_record, W_record, particle)
 print("MSE: %.6f" % (mse))
-particle_filt.visualize(X_gt, X_record, W_record, particle)
+particle_filt.visualize(X_gt, X_ODO, X_record, W_record, particle)
