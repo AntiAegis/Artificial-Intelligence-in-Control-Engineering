@@ -4,9 +4,9 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from utils.process_model import process_model
-from utils.important_factor import important_factor
-from utils.random_index import random_index
+from .process_model import process_model
+from .important_factor import important_factor
+from .random_index import random_index
 
 
 #------------------------------------------------------------------------------
@@ -193,11 +193,14 @@ class ParticleFilter(object):
 
 
 	# Visualize the progress
-	def visualize(self, X_true, X_record, W_record, particle="max"):
+	def visualize(self, X_true, X_odo, X_record, W_record, particle="max"):
 		"""
 		[Arguments]
 			X_true : (ndarray) Ground truth matrix of positions over time
 				steps. The shape of X_true is (3, N).
+
+			X_odo : (ndarray) Odometry matrix of positions over time
+				steps. The shape of X_true is (2, N).
 
 			X_record : (list) List of position particles over time steps.
 
@@ -208,7 +211,7 @@ class ParticleFilter(object):
 		"""
 		x_true, y_true = X_true[0,:], X_true[1,:]
 		x_lm, y_lm = self.landmarks[0,:], self.landmarks[1,:]
-		x_odo, y_odo = [], []
+		x_pred, y_pred = [], []
 
 		for n in range(self.n_steps):
 			X, W = X_record[n], W_record[n]
@@ -220,13 +223,14 @@ class ParticleFilter(object):
 			elif particle=="median":
 				idx = int(np.argmin(np.abs(W-np.median(W))))
 
-			x_odo.append(X[idx][0, 0])
-			y_odo.append(X[idx][1, 0])
+			x_pred.append(X[idx][0, 0])
+			y_pred.append(X[idx][1, 0])
 
 		plt.figure(1)
 		plt.plot(x_true, y_true, "-r")
-		plt.plot(x_odo, y_odo, "--b")
+		plt.plot(X_odo[0,:], X_odo[1,:], "-g")
+		plt.plot(x_pred, y_pred, "--b")
 		plt.plot(x_lm, y_lm, "xm")
 		plt.plot(x_true[0], y_true[0], "o")
-		plt.legend(["Ground truth", "Prediction", "Landmark", "Starting"])
+		plt.legend(["Ground truth", "Odometry", "Prediction", "Landmark", "Starting"])
 		plt.show()
